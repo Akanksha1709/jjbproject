@@ -1,0 +1,32 @@
+- view:
+    name: ListView
+    view-type: list
+    description: 'List View'
+    filter-executors: true
+    filter-queue: true
+    job-name:
+        - Checkstyle-3
+        - HelloWorld
+        - Publish-JJB-Temp
+        - taskpublisher-1
+    columns:
+        - status
+        - weather
+        - job
+        - last-success
+        - last-failure
+        - last-duration
+        - build-button
+        - last-stable
+        - robot-list
+        - find-bugs
+        - jacoco
+        - git-branch
+        - schedule-build
+        - priority-sorter
+        - build-filter
+        - desc
+        - policy-violations
+        - member-graph-view
+    recurse: true
+    status-filter: true

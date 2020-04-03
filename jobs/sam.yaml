@@ -1,0 +1,13 @@
+- view:
+    name: NestedView
+    view-type: nested
+    description: 'Nested View'
+    filter-executors: true
+    filter-queue: true
+    views:
+      - name: nestedview
+        view-type: all
+    columns:
+      - status
+      - weather
+      

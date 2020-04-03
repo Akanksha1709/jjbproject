@@ -1,0 +1,71 @@
+- job:
+    scm:
+      - Final-JJB-SimpleJob
+    builders:      
+      - maven-target:
+            maven-version: maven3
+            pom: pom.xml
+            goals: clean compile package install test site
+    publishers:
+      - archive:
+          artifacts: 'target/*.jar'
+          allow-empty: 'true'
+          fingerprint: true
+          default-excludes: false
+      - email:
+            recipients: akanksha.saxena1709@gmail.com
+            notify-every-unstable-build: true
+            send-to-individuals: true
+      - workspace-cleanup:
+          include:
+            - "*.html"
+          exclude:
+            - "*.xml"
+          clean-if:
+            - success: true
+            - unstable: false
+            - failure: false
+            - aborted: false
+            - not-built: false
+          dirmatch: true
+          fail-build: false
+          clean-parent: true
+          #external-deletion-command: 'command'
+          disable-deferred-wipeout: true
+      - fingerprint:
+          files: target/*.jar
+          record-artifacts: false
+      - checkstyle:
+            pattern: '**/target/checkstyle-result.xml'
+            healthy: 0
+            unhealthy: 100
+            health-threshold: 'high'
+            thresholds:
+              unstable:
+                total-high: 10
+              failed:
+                total-high: 1
+    name: Jenkins-Job-Builder-final
+    project-type: freestyle
+    defaults: global
+    description: 'Do not edit this job through the web!'
+    disabled: false
+    display-name: 'Final-JJB-SimpleJob'
+    concurrent: true
+    quiet-period: 5
+    block-downstream: false
+    block-upstream: false
+    retry-count: 3
+    #node: Agent1
+    logrotate:
+      daysToKeep: 3
+      numToKeep: 20
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+- scm:
+    name: Final-JJB-SimpleJob
+    scm:
+      - git:
+         url: https://github.com/Akanksha1709/publisher1
+         branches:
+          - master

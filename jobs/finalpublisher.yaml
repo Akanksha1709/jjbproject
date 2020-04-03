@@ -1,0 +1,73 @@
+- project:
+    name: 30-JJB-Temp
+    jobs:
+        - 'Checkstyle-{num}':
+             num: 3 
+- job-template:
+    disabled_var:
+    command: 'df'
+    type: freestyle
+    
+    name: 'Checkstyle-{num}'
+    id: 'Checkstyle-{num}'
+    scm:
+      - MultipleJob_Template
+    builders:
+      - maven-target:
+            maven-version: maven3
+            pom: pom.xml
+            goals: clean compile package install test site
+    publishers:
+      - aggregate-tests:
+          include-failed-builds: true
+      - trigger:
+          project: HelloWorld
+          threshold: SUCCESS
+      - checkstyle:
+          pattern: 'target/checkstyle-result.xml'
+          healthy: 0
+          unhealthy: 100
+          health-threshold: 'high'
+          thresholds:
+            unstable:
+              total-high: 10
+            failed:
+              total-high: 1
+      - junit:
+          results: nosetests-example.xml
+          keep-long-stdio: false
+          health-scale-factor: 2.0
+          allow-empty-results: true
+          test-stability: true
+          claim-build: true
+          measurement-plots: true
+          flaky-test-reports: true
+          allow-empty-results: true
+          junit-attachments: true
+      - archive:
+          artifacts: 'target\*.jar'
+          allow-empty: 'true'
+          fingerprint: true
+          default-excludes: false
+    description: 'Do not edit this job through the web!'
+    disabled: false
+    concurrent: true
+    quiet-period: 5
+    block-downstream: false
+    block-upstream: false
+    retry-count: 3
+    node: master
+    logrotate:
+      daysToKeep: 3
+      numToKeep: 20
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+
+- scm:
+    name: MultipleJob_Template
+    scm:
+      - git:
+         url: https://github.com/Akanksha1709/publisher1.git 
+         branches:
+          - master
+

@@ -1,0 +1,42 @@
+- view:
+    name: NestedView
+    view-type: nested
+    description: 'Nested View'
+    filter-executors: true
+    filter-queue: true
+        views:
+          - name: All
+                view-type: all
+    job-name:
+        - 2-JJB-Temp
+        - 3-JJB-Temp-1
+        - Testgit-JJB-Temp
+        -       demo
+    columns:
+        - status
+- view:
+    name: NestedView
+    view-type: nested
+    description: 'Nested View'
+    filter-executors: true
+    filter-queue: true
+        views:
+          - name: All
+                view-type: all
+    job-name:
+        - 2-JJB-Temp
+        - 3-JJB-Temp-1
+        - Testgit-JJB-Temp
+        -       demo
+    columns:
+        - status
+        - weather
+        - job
+        - last-success
+        - last-failure
+        - last-duration
+        - build-button
+        - last-stable
+
+    recurse: true
+    status-f

@@ -1,0 +1,75 @@
+- project:
+    name: Publish-JJB-Temp
+    jobs:
+        - Publish-JJB-Temp:
+ 
+- job-template:
+    disabled_var:
+    command: 'df'
+    type: freestyle
+    
+    name: 'Publish-JJB-Temp'
+    id: 'Publish-JJB-Temp'
+    scm:
+      - Publish-JJB-Temp
+    builders:
+      - maven-target:
+            maven-version: maven3
+            pom: pom.xml
+            goals: clean compile package install test site
+    publishers:
+      - archive:
+          artifacts: 'target/*.jar'
+          allow-empty: 'true'
+          fingerprint: true
+          default-excludes: false
+      - git:
+          push-merge: true
+          push-only-if-success: false
+          force-push: true
+          tags:
+             - tag:
+                 remote: origin
+                 name: filestext
+                 message: "first tag message"
+                 create-tag: true
+                 update-tag: true
+          branches:
+              - branch:
+                 remote: origin
+                 name: "master"
+          notes:
+              - note:
+                 remote: origin
+                 message: "My notes to push"
+                 namespace: master
+                 replace-note: true
+      - github-notifier:
+      - github-pull-request-merge:
+          only-admins-merge: true
+          disallow-own-code: true
+          merge-comment: 'my first commit message'
+          fail-on-non-merge: true
+          delete-on-merge: true
+      
+    description: 'Do not edit this job through the web!!'
+    disabled: false
+    concurrent: true
+    quiet-period: 5
+    block-downstream: false
+    block-upstream: false
+    retry-count: 3
+    logrotate:
+      daysToKeep: 3
+      numToKeep: 20
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+
+- scm:
+    name: Publish-JJB-Temp
+    scm:
+      - git:
+         url: https://github.com/Akanksha1709/HelloWorldApp.git
+         branches:
+          - master
+
